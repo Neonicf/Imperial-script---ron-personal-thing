@@ -1,0 +1,1864 @@
+-- Rise of nations script by ME, Neonicf
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/Obsidian/refs/heads/main/Library.lua"))()
+
+Library:SetWatermarkVisibility(true)
+
+Library:SetWatermark("Imperial Script")
+
+Library:SetWatermarkVisibility(true)
+ 
+local FrameTimer = tick()
+local FrameCounter = 0;
+local FPS = 60;
+ 
+local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(function()
+    FrameCounter += 1;
+ 
+    if (tick() - FrameTimer) >= 1 then
+        FPS = FrameCounter;
+        FrameTimer = tick();
+        FrameCounter = 0;
+    end;
+ 
+    Library:SetWatermark(('Imperial Script | %s fps | %s ms'):format(
+        math.floor(FPS),
+        math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue())
+    ));
+end);
+
+local Window = Library:CreateWindow({
+    Title = "Imperial Script",
+    Footer = "v1.0.0 Rise of Nations Script by Neonicf/Notezfc",
+    ToggleKeybind = Enum.KeyCode.RightControl,
+    Center = true,
+    AutoShow = true,
+    Icon = 108776550239899,
+    BackgroundImage = "rbxassetid://116822664434529",
+})
+
+local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/Obsidian/main/addons/ThemeManager.lua"))()
+ThemeManager:SetLibrary(Library)
+ThemeManager:ApplyTheme("Catppuccin")
+
+local MainTab = Window:AddTab("Home/Credits", "navigation") -- Second parameter is the icon name (optional)
+
+local LeftGroupbox = MainTab:AddLeftGroupbox("Updates", "wrench")
+local RightGroupbox = MainTab:AddRightGroupbox("Credits", "info")
+
+local Tabbox = MainTab:AddRightTabbox("Credits")
+
+local WrappedLabel = RightGroupbox:AddLabel({
+    Text = "Neonicf/Notezfc (they're the same person) made the entire script gui (except for the obsidian ui library ofc), this is all made by himself, no source free scripts. This script will be updated when needed, you can see more at the yt channel called notezfc",
+    DoesWrap = true
+})
+
+local Button = RightGroupbox:AddButton({
+    Text = "Click to copy the yt channel link",
+    Func = function()
+      setclipboard("https://www.youtube.com/@Notezfc")
+    end,
+    DoubleClick = false -- Requires double-click for risky actions
+})
+
+local WrappedLabel = LeftGroupbox:AddLabel({
+    Text = "1.0.0 Release Update, This is the first ever version of the script being released, featuring stuff...",
+    DoesWrap = true
+})
+
+local MainTab = Window:AddTab("Country Stats", "search-code")
+local LeftGroupbox = MainTab:AddLeftGroupbox("Country look up", "folder-search")
+local RightGroupbox = MainTab:AddRightGroupbox("Country stats output (Economy)", "circle-dollar-sign")
+
+-- Economy/Revenue Section
+local TreasuryLabel = RightGroupbox:AddLabel({ Text = "Treasury/Balance = ", DoesWrap = true })
+local IncomeRevenueLabel = RightGroupbox:AddLabel({ Text = "Income/Revenue =  ", DoesWrap = true })
+local TaxLabel = RightGroupbox:AddLabel({ Text = "Tax = ", DoesWrap = true })
+local TaxResourceLabel = RightGroupbox:AddLabel({ Text = "TaxResource (resources) = ", DoesWrap = true })
+local TradeExportLabel = RightGroupbox:AddLabel({ Text = "TradeExport =", DoesWrap = true })
+local ReparationsRevenueLabel = RightGroupbox:AddLabel({ Text = "Reparations = ", DoesWrap = true })
+local PuppetsRevenueLabel = RightGroupbox:AddLabel({ Text = "Puppets = ", DoesWrap = true })
+
+RightGroupbox:AddDivider()
+
+-- Economy/Expenses Section
+local UpkeepLabel = RightGroupbox:AddLabel({ Text = "Upkeep =", DoesWrap = true })
+local ReinforcementsLabel = RightGroupbox:AddLabel({ Text = "Reinforcements =", DoesWrap = true })
+local TradeImportLabel = RightGroupbox:AddLabel({ Text = "TradeImport =", DoesWrap = true })
+local ReparationsExpensesLabel = RightGroupbox:AddLabel({ Text = "Reparations =", DoesWrap = true })
+local PuppetsExpensesLabel = RightGroupbox:AddLabel({ Text = "Puppets =", DoesWrap = true })
+local BuildingExpensesLabel = RightGroupbox:AddLabel({ Text = "Building Expenses =", DoesWrap = true })
+
+RightGroupbox:AddDivider()
+
+-- Economy-related Spending (from Expenses folder)
+local GovernmentSpendingLabel = RightGroupbox:AddLabel({ Text = "Government Spending (Economy) =", DoesWrap = true })
+local SecuritySpendingLabel = RightGroupbox:AddLabel({ Text = "Security Spending (Economy) =", DoesWrap = true })
+local EducationSpendingLabel = RightGroupbox:AddLabel({ Text = "Education Spending (Economy) =", DoesWrap = true })
+local AntiCorruptionSpendingLabel = RightGroupbox:AddLabel({ Text = "Anti-Corruption Spending (Economy) =", DoesWrap = true })
+local HealthcareSpendingLabel = RightGroupbox:AddLabel({ Text = "Healthcare Spending (Economy) =", DoesWrap = true })
+local ResearchSpendingLabel = RightGroupbox:AddLabel({ Text = "Research Spending (Economy) =", DoesWrap = true })
+local ReconstructionSpendingLabel = RightGroupbox:AddLabel({ Text = "Reconstruction Spending (Economy) =", DoesWrap = true })
+
+
+RightGroupbox:AddDivider() -- Divider for Power stats
+
+local CorruptionLabel = RightGroupbox:AddLabel({ Text = "Corruption = ", DoesWrap = true })
+local CorruptionIncreaseLabel = RightGroupbox:AddLabel({ Text = "Corruption (Increase) = ", DoesWrap = true })
+local MilitaryLabel = RightGroupbox:AddLabel({ Text = "Military = ", DoesWrap = true })
+local MilitaryIncreaseLabel = RightGroupbox:AddLabel({ Text = "Military (Increase) = ", DoesWrap = true })
+local PoliticalPowerLabel = RightGroupbox:AddLabel({ Text = "Political Power = ", DoesWrap = true })
+local PoliticalPowerIncreaseLabel = RightGroupbox:AddLabel({ Text = "Political Power (Increase) = ", DoesWrap = true })
+local ReadinessLabel = RightGroupbox:AddLabel({ Text = "Readiness = ", DoesWrap = true })
+local ReadinessIncreaseLabel = RightGroupbox:AddLabel({ Text = "Readiness (Increase) = ", DoesWrap = true })
+local ResearchPowerLabel = RightGroupbox:AddLabel({ Text = "Research (Power) = ", DoesWrap = true })
+local ResearchPowerIncreaseLabel = RightGroupbox:AddLabel({ Text = "Research (Power Increase) = ", DoesWrap = true })
+local WarExhaustionLabel = RightGroupbox:AddLabel({ Text = "War Exhaustion = ", DoesWrap = true })
+local WarExhaustionIncreaseLabel = RightGroupbox:AddLabel({ Text = "War Exhaustion (Increase) = ", DoesWrap = true })
+local ManpowerLabel = RightGroupbox:AddLabel({ Text = "Manpower = ", DoesWrap = true })
+
+RightGroupbox:AddDivider() -- Divider for Data stats
+
+local StabilityLabel = RightGroupbox:AddLabel({ Text = "Stability = ", DoesWrap = true })
+local StabilityChangeLabel = RightGroupbox:AddLabel({ Text = "Stability (Change) = ", DoesWrap = true })
+local StabilityGoalLabel = RightGroupbox:AddLabel({ Text = "Stability (Goal) = ", DoesWrap = true })
+local StabilityBaseLabel = RightGroupbox:AddLabel({ Text = "Stability (Base) = ", DoesWrap = true })
+local PopulationLabel = RightGroupbox:AddLabel({ Text = "Population = ", DoesWrap = true })
+local PopulationGrowthRateLabel = RightGroupbox:AddLabel({ Text = "Population (Growth Rate) = ", DoesWrap = true })
+local GrowthRateExistingPopulationLabel = RightGroupbox:AddLabel({ Text = "Growth Rate: Existing Population = ", DoesWrap = true })
+local GrowthRateNaturalGrowthLabel = RightGroupbox:AddLabel({ Text = "Growth Rate: Natural Growth = ", DoesWrap = true })
+local GrowthRateStabilityLabel = RightGroupbox:AddLabel({ Text = "Growth Rate: Stability = ", DoesWrap = true })
+local RankingLabel = RightGroupbox:AddLabel({ Text = "Ranking = ", DoesWrap = true })
+
+
+RightGroupbox:AddDivider() -- Divider for Laws
+
+local IdeologyLabel = RightGroupbox:AddLabel({ Text = "Ideology = ", DoesWrap = true })
+local ConscriptionLabel = RightGroupbox:AddLabel({ Text = "Conscription = ", DoesWrap = true })
+local TaxationLawsLabel = RightGroupbox:AddLabel({ Text = "Taxation (Laws) = ", DoesWrap = true })
+
+-- Political Laws Attributes
+RightGroupbox:AddDivider()
+local PoliticalConscriptionLabel = RightGroupbox:AddLabel({ Text = "Political: Conscription = ", DoesWrap = true })
+local PoliticalFactionLabel = RightGroupbox:AddLabel({ Text = "Political: Faction = ", DoesWrap = true })
+local PoliticalFirearmLabel = RightGroupbox:AddLabel({ Text = "Political: Firearm = ", DoesWrap = true })
+local PoliticalIndustryLabel = RightGroupbox:AddLabel({ Text = "Political: Industry = ", DoesWrap = true })
+local PoliticalPopulationLabel = RightGroupbox:AddLabel({ Text = "Political: Population = ", DoesWrap = true })
+local PoliticalPressLabel = RightGroupbox:AddLabel({ Text = "Political: Press = ", DoesWrap = true })
+local PoliticalReligionLabel = RightGroupbox:AddLabel({ Text = "Political: Religion = ", DoesWrap = true })
+local PoliticalResourceLabel = RightGroupbox:AddLabel({ Text = "Political: Resource = ", DoesWrap = true })
+local PoliticalUniqueMonarchyLabel = RightGroupbox:AddLabel({ Text = "Political: Unique_Monarchy = ", DoesWrap = true })
+local PoliticalWarBondLabel = RightGroupbox:AddLabel({ Text = "Political: WarBond = ", DoesWrap = true })
+local PoliticalWorkingLabel = RightGroupbox:AddLabel({ Text = "Political: Working = ", DoesWrap = true })
+
+-- Spending Laws Attributes
+RightGroupbox:AddDivider()
+local SpendingCorruptionLabel = RightGroupbox:AddLabel({ Text = "Spending (Laws): Corruption = ", DoesWrap = true })
+local SpendingEducationLabel = RightGroupbox:AddLabel({ Text = "Spending (Laws): Education = ", DoesWrap = true })
+local SpendingGovernmentLabel = RightGroupbox:AddLabel({ Text = "Spending (Laws): Government = ", DoesWrap = true })
+local SpendingHealthcareLabel = RightGroupbox:AddLabel({ Text = "Spending (Laws): Healthcare = ", DoesWrap = true })
+local SpendingMilitaryLabel = RightGroupbox:AddLabel({ Text = "Spending (Laws): Military = ", DoesWrap = true })
+local SpendingReconstructionLabel = RightGroupbox:AddLabel({ Text = "Spending (Laws): Reconstruction = ", DoesWrap = true })
+local SpendingResearchLabel = RightGroupbox:AddLabel({ Text = "Spending (Laws): Research = ", DoesWrap = true })
+local SpendingSecurityLabel = RightGroupbox:AddLabel({ Text = "Spending (Laws): Security = ", DoesWrap = true })
+
+RightGroupbox:AddDivider()
+
+-- Other Country Data Section
+local C3Label = RightGroupbox:AddLabel({ Text = "C3 = ", DoesWrap = true })
+local CapitalLabel = RightGroupbox:AddLabel({ Text = "Capital = ", DoesWrap = true })
+local LeaderLabel = RightGroupbox:AddLabel({ Text = "Leader = ", DoesWrap = true })
+local SkinLabel = RightGroupbox:AddLabel({ Text = "Skin = ", DoesWrap = true })
+
+
+-- Helper function to format numbers with commas
+local function formatNumberWithCommas(number)
+    if type(number) ~= "number" then
+        return tostring(number)
+    end
+    local s = tostring(math.floor(number))
+    local formatted = ""
+    local len = #s
+    local count = 0
+    for i = len, 1, -1 do
+        formatted = s:sub(i, i) .. formatted
+        count = count + 1
+        if count % 3 == 0 and i ~= 1 then
+            formatted = "," .. formatted
+        end
+    end
+    return formatted
+end
+
+-- Helper function to get value from instance or attribute
+local function getValue(instance, name, isAttribute)
+    if not instance then return nil end
+    local val = isAttribute and instance:GetAttribute(name) or instance:FindFirstChild(name)
+    if val then
+        if isAttribute then
+            return val
+        elseif val:IsA("IntValue") or val:IsA("NumberValue") then
+            return val.Value
+        elseif val:IsA("StringValue") then
+            return val.Value
+        elseif val:IsA("Vector3Value") then
+            return val.Value.X -- Displaying only X for Vector3Value
+        elseif val:IsA("Color3Value") then
+            return tostring(val.Value) -- Convert Color3 to string
+        elseif val:IsA("ObjectValue") then
+            return tostring(val.Value) -- Convert ObjectValue to string (will show instance path)
+        end
+    end
+    return nil
+end
+
+-- Variables to manage the refresh task and toggle state
+local currentRefreshTask = nil
+local currentCountryNameBeingRefreshed = nil
+local autoRefreshEnabled = true -- Default state for the toggle
+
+-- Function to refresh all country stats in the UI
+local function refreshCountryStats(countryName)
+    local countryDataFolder = game.Workspace:FindFirstChild("CountryData") and game.Workspace.CountryData:FindFirstChild(countryName)
+    local notFoundText = "N/A (Country not found)"
+
+    if countryDataFolder then
+        local economyFolder = countryDataFolder:FindFirstChild("Economy")
+        local expensesFolder = economyFolder and economyFolder:FindFirstChild("Expenses")
+        local revenueFolder = economyFolder and economyFolder:FindFirstChild("Revenue")
+        local powerFolder = countryDataFolder:FindFirstChild("Power")
+        local dataFolder = countryDataFolder:FindFirstChild("Data")
+        local lawsFolder = countryDataFolder:FindFirstChild("Laws")
+        local politicalFolder = lawsFolder and lawsFolder:FindFirstChild("Political")
+        local spendingFolder = lawsFolder and lawsFolder:FindFirstChild("Spending")
+        local populationFolder = countryDataFolder:FindFirstChild("Population")
+        local growthRateInstance = populationFolder and populationFolder:FindFirstChild("GrowthRate")
+
+
+        -- Economy/Revenue
+        local treasury = getValue(economyFolder, "Balance")
+        TreasuryLabel:SetText("Treasury/Balance = " .. (treasury ~= nil and formatNumberWithCommas(treasury) or "N/A"))
+
+        local incomeTotal = getValue(revenueFolder, "Total", true)
+        IncomeRevenueLabel:SetText("Income/Revenue = " .. (incomeTotal ~= nil and formatNumberWithCommas(incomeTotal) or "N/A"))
+
+        local tax = getValue(revenueFolder, "Tax")
+        TaxLabel:SetText("Tax = " .. (tax ~= nil and formatNumberWithCommas(tax) or "N/A"))
+
+        local taxResource = getValue(revenueFolder, "TaxResource")
+        TaxResourceLabel:SetText("TaxResource (resources) = " .. (taxResource ~= nil and formatNumberWithCommas(taxResource) or "N/A"))
+
+        local tradeExport = getValue(revenueFolder, "TradeExport")
+        TradeExportLabel:SetText("TradeExport = " .. (tradeExport ~= nil and formatNumberWithCommas(tradeExport) or "N/A"))
+
+        local reparationsRevenue = getValue(revenueFolder, "Reparations")
+        ReparationsRevenueLabel:SetText("Reparations = " .. (reparationsRevenue ~= nil and formatNumberWithCommas(reparationsRevenue) or "N/A"))
+
+        local puppetsRevenue = getValue(revenueFolder, "Puppets")
+        PuppetsRevenueLabel:SetText("Puppets = " .. (puppetsRevenue ~= nil and formatNumberWithCommas(puppetsRevenue) or "N/A"))
+
+        -- Economy/Expenses
+        local upkeep = getValue(expensesFolder, "Upkeep")
+        UpkeepLabel:SetText("Upkeep = " .. (upkeep ~= nil and formatNumberWithCommas(upkeep) or "N/A"))
+
+        local reinforcements = getValue(expensesFolder, "Reinforcements")
+        ReinforcementsLabel:SetText("Reinforcements = " .. (reinforcements ~= nil and formatNumberWithCommas(reinforcements) or "N/A"))
+
+        local tradeImport = getValue(expensesFolder, "TradeImport")
+        TradeImportLabel:SetText("TradeImport = " .. (tradeImport ~= nil and formatNumberWithCommas(tradeImport) or "N/A"))
+
+        local reparationsExpenses = getValue(expensesFolder, "Reparations")
+        ReparationsExpensesLabel:SetText("Reparations = " .. (reparationsExpenses ~= nil and formatNumberWithCommas(reparationsExpenses) or "N/A"))
+
+        local puppetsExpenses = getValue(expensesFolder, "Puppets")
+        PuppetsExpensesLabel:SetText("Puppets = " .. (puppetsExpenses ~= nil and formatNumberWithCommas(puppetsExpenses) or "N/A"))
+
+        local buildingExpenses = getValue(expensesFolder, "BuildingExpenses")
+        BuildingExpensesLabel:SetText("Building Expenses = " .. (buildingExpenses ~= nil and formatNumberWithCommas(buildingExpenses) or "N/A"))
+
+        -- Economy-related Spending (from Expenses folder)
+        local economySpendingGovernment = getValue(expensesFolder, "Spending_Government")
+        GovernmentSpendingLabel:SetText("Government Spending (Economy) = " .. (economySpendingGovernment ~= nil and formatNumberWithCommas(economySpendingGovernment) or "N/A"))
+
+        local economySpendingSecurity = getValue(expensesFolder, "Spending_Security")
+        SecuritySpendingLabel:SetText("Security Spending (Economy) = " .. (economySpendingSecurity ~= nil and formatNumberWithCommas(economySpendingSecurity) or "N/A"))
+
+        local economySpendingEducation = getValue(expensesFolder, "Spending_Education")
+        EducationSpendingLabel:SetText("Education Spending (Economy) = " .. (economySpendingEducation ~= nil and formatNumberWithCommas(economySpendingEducation) or "N/A"))
+
+        local economySpendingCorruption = getValue(expensesFolder, "Spending_Corruption")
+        AntiCorruptionSpendingLabel:SetText("Anti-Corruption Spending (Economy) = " .. (economySpendingCorruption ~= nil and formatNumberWithCommas(economySpendingCorruption) or "N/A"))
+
+        local economySpendingHealthcare = getValue(expensesFolder, "Spending_Healthcare")
+        HealthcareSpendingLabel:SetText("Healthcare Spending (Economy) = " .. (economySpendingHealthcare ~= nil and formatNumberWithCommas(economySpendingHealthcare) or "N/A"))
+
+        local economySpendingResearch = getValue(expensesFolder, "Spending_Research")
+        ResearchSpendingLabel:SetText("Research Spending (Economy) = " .. (economySpendingResearch ~= nil and formatNumberWithCommas(economySpendingResearch) or "N/A"))
+
+        local economySpendingReconstruction = getValue(expensesFolder, "Spending_Reconstruction")
+        ReconstructionSpendingLabel:SetText("Reconstruction Spending (Economy) = " .. (economySpendingReconstruction ~= nil and formatNumberWithCommas(economySpendingReconstruction) or "N/A"))
+
+
+        -- Power Stats
+        local corruptionInstance = powerFolder and powerFolder:FindFirstChild("Corruption")
+        local corruptionPower = getValue(powerFolder, "Corruption")
+        CorruptionLabel:SetText("Corruption = " .. (corruptionPower ~= nil and formatNumberWithCommas(corruptionPower) or "N/A"))
+        local corruptionIncrease = getValue(corruptionInstance, "Increase")
+        CorruptionIncreaseLabel:SetText("Corruption (Increase) = " .. (corruptionIncrease ~= nil and formatNumberWithCommas(corruptionIncrease) or "N/A"))
+
+        local militaryInstance = powerFolder and powerFolder:FindFirstChild("Military")
+        local militaryPower = getValue(powerFolder, "Military")
+        MilitaryLabel:SetText("Military = " .. (militaryPower ~= nil and formatNumberWithCommas(militaryPower) or "N/A"))
+        local militaryIncrease = getValue(militaryInstance, "Increase")
+        MilitaryIncreaseLabel:SetText("Military (Increase) = " .. (militaryIncrease ~= nil and formatNumberWithCommas(militaryIncrease) or "N/A"))
+
+        local politicalPowerInstance = powerFolder and powerFolder:FindFirstChild("Political")
+        local politicalPower = getValue(powerFolder, "Political")
+        PoliticalPowerLabel:SetText("Political Power = " .. (politicalPower ~= nil and formatNumberWithCommas(politicalPower) or "N/A"))
+        local politicalPowerIncrease = getValue(politicalPowerInstance, "Increase")
+        PoliticalPowerIncreaseLabel:SetText("Political Power (Increase) = " .. (politicalPowerIncrease ~= nil and formatNumberWithCommas(politicalPowerIncrease) or "N/A"))
+
+        local readinessInstance = powerFolder and powerFolder:FindFirstChild("Readiness")
+        local readinessPower = getValue(powerFolder, "Readiness")
+        ReadinessLabel:SetText("Readiness = " .. (readinessPower ~= nil and formatNumberWithCommas(readinessPower) or "N/A"))
+        local readinessIncrease = getValue(readinessInstance, "Increase")
+        ReadinessIncreaseLabel:SetText("Readiness (Increase) = " .. (readinessIncrease ~= nil and formatNumberWithCommas(readinessIncrease) or "N/A"))
+
+        local researchPowerInstance = powerFolder and powerFolder:FindFirstChild("Research")
+        local researchPower = getValue(powerFolder, "Research")
+        ResearchPowerLabel:SetText("Research (Power) = " .. (researchPower ~= nil and formatNumberWithCommas(researchPower) or "N/A"))
+        local researchIncrease = getValue(researchPowerInstance, "Increase")
+        ResearchPowerIncreaseLabel:SetText("Research (Power Increase) = " .. (researchIncrease ~= nil and formatNumberWithCommas(researchIncrease) or "N/A"))
+
+        local warExhaustionInstance = powerFolder and powerFolder:FindFirstChild("WarExhaustion")
+        local warExhaustionPower = getValue(powerFolder, "WarExhaustion")
+        WarExhaustionLabel:SetText("War Exhaustion = " .. (warExhaustionPower ~= nil and formatNumberWithCommas(warExhaustionPower) or "N/A"))
+        local warExhaustionIncrease = getValue(warExhaustionInstance, "Increase")
+        WarExhaustionIncreaseLabel:SetText("War Exhaustion (Increase) = " .. (warExhaustionIncrease ~= nil and formatNumberWithCommas(warExhaustionIncrease) or "N/A"))
+
+        local manpowerValue = getValue(countryDataFolder, "Manpower")
+        ManpowerLabel:SetText("Manpower = " .. (manpowerValue ~= nil and formatNumberWithCommas(manpowerValue) or "N/A"))
+
+
+        -- Data Stats
+        local stabilityInstance = dataFolder and dataFolder:FindFirstChild("Stability")
+        local stabilityValue = getValue(dataFolder, "Stability")
+        StabilityLabel:SetText("Stability = " .. (stabilityValue ~= nil and formatNumberWithCommas(stabilityValue) or "N/A"))
+
+        local stabilityChange = getValue(stabilityInstance, "Change")
+        StabilityChangeLabel:SetText("Stability (Change) = " .. (stabilityChange ~= nil and formatNumberWithCommas(stabilityChange) or "N/A"))
+
+        local goalInstance = stabilityInstance and stabilityInstance:FindFirstChild("Goal")
+        local stabilityGoal = getValue(stabilityInstance, "Goal")
+        StabilityGoalLabel:SetText("Stability (Goal) = " .. (stabilityGoal ~= nil and formatNumberWithCommas(stabilityGoal) or "N/A"))
+
+        local stabilityBase = getValue(goalInstance, "Base")
+        StabilityBaseLabel:SetText("Stability (Base) = " .. (stabilityBase ~= nil and formatNumberWithCommas(stabilityBase) or "N/A"))
+
+        local populationValue = getValue(countryDataFolder, "Population")
+        PopulationLabel:SetText("Population = " .. (populationValue ~= nil and formatNumberWithCommas(populationValue) or "N/A"))
+
+        local populationGrowthRate = getValue(populationFolder, "GrowthRate")
+        PopulationGrowthRateLabel:SetText("Population (Growth Rate) = " .. (populationGrowthRate ~= nil and formatNumberWithCommas(populationGrowthRate) or "N/A"))
+
+        local growthRateExistingPopulation = getValue(growthRateInstance, "Existing_Population", true)
+        GrowthRateExistingPopulationLabel:SetText("Growth Rate: Existing Population = " .. (growthRateExistingPopulation ~= nil and formatNumberWithCommas(growthRateExistingPopulation) or "N/A"))
+
+        local growthRateNaturalGrowth = getValue(growthRateInstance, "Natural_Growth", true)
+        GrowthRateNaturalGrowthLabel:SetText("Growth Rate: Natural Growth = " .. (growthRateNaturalGrowth ~= nil and formatNumberWithCommas(growthRateNaturalGrowth) or "N/A"))
+
+        local growthRateStability = getValue(growthRateInstance, "Stability", true)
+        GrowthRateStabilityLabel:SetText("Growth Rate: Stability = " .. (growthRateStability ~= nil and formatNumberWithCommas(growthRateStability) or "N/A"))
+
+        local rankingValue = getValue(countryDataFolder, "Ranking")
+        RankingLabel:SetText("Ranking = " .. (rankingValue ~= nil and formatNumberWithCommas(rankingValue) or "N/A"))
+
+
+        -- Laws (Direct Children)
+        local ideologyValue = getValue(lawsFolder, "Ideology")
+        IdeologyLabel:SetText("Ideology = " .. (ideologyValue ~= nil and tostring(ideologyValue) or "N/A"))
+
+        local conscriptionValue = getValue(lawsFolder, "Conscription")
+        ConscriptionLabel:SetText("Conscription = " .. (conscriptionValue ~= nil and formatNumberWithCommas(conscriptionValue) or "N/A"))
+
+        local taxationLawsValue = getValue(lawsFolder, "Taxation")
+        TaxationLawsLabel:SetText("Taxation (Laws) = " .. (taxationLawsValue ~= nil and formatNumberWithCommas(taxationLawsValue) or "N/A"))
+
+
+        -- Political Laws Attributes
+        local politicalConscription = getValue(politicalFolder, "Conscription", true)
+        PoliticalConscriptionLabel:SetText("Political: Conscription = " .. (politicalConscription ~= nil and formatNumberWithCommas(politicalConscription) or "N/A"))
+
+        local politicalFaction = getValue(politicalFolder, "Faction", true)
+        PoliticalFactionLabel:SetText("Political: Faction = " .. (politicalFaction ~= nil and formatNumberWithCommas(politicalFaction) or "N/A"))
+
+        local politicalFirearm = getValue(politicalFolder, "Firearm", true)
+        PoliticalFirearmLabel:SetText("Political: Firearm = " .. (politicalFirearm ~= nil and formatNumberWithCommas(politicalFirearm) or "N/A"))
+
+        local politicalIndustry = getValue(politicalFolder, "Industry", true)
+        PoliticalIndustryLabel:SetText("Political: Industry = " .. (politicalIndustry ~= nil and formatNumberWithCommas(politicalIndustry) or "N/A"))
+
+        local politicalPopulation = getValue(politicalFolder, "Population", true)
+        PoliticalPopulationLabel:SetText("Political: Population = " .. (politicalPopulation ~= nil and formatNumberWithCommas(politicalPopulation) or "N/A"))
+
+        local politicalPress = getValue(politicalFolder, "Press", true)
+        PoliticalPressLabel:SetText("Political: Press = " .. (politicalPress ~= nil and formatNumberWithCommas(politicalPress) or "N/A"))
+
+        local politicalReligion = getValue(politicalFolder, "Religion", true)
+        PoliticalReligionLabel:SetText("Political: Religion = " .. (politicalReligion ~= nil and formatNumberWithCommas(politicalReligion) or "N/A"))
+
+        local politicalResource = getValue(politicalFolder, "Resource", true)
+        PoliticalResourceLabel:SetText("Political: Resource = " .. (politicalResource ~= nil and formatNumberWithCommas(politicalResource) or "N/A"))
+
+        local politicalUniqueMonarchy = getValue(politicalFolder, "Unique_Monarchy", true)
+        PoliticalUniqueMonarchyLabel:SetText("Political: Unique_Monarchy = " .. (politicalUniqueMonarchy ~= nil and formatNumberWithCommas(politicalUniqueMonarchy) or "N/A"))
+
+        local politicalWarBond = getValue(politicalFolder, "WarBond", true)
+        PoliticalWarBondLabel:SetText("Political: WarBond = " .. (politicalWarBond ~= nil and formatNumberWithCommas(politicalWarBond) or "N/A"))
+
+        local politicalWorking = getValue(politicalFolder, "Working", true)
+        PoliticalWorkingLabel:SetText("Political: Working = " .. (politicalWorking ~= nil and formatNumberWithCommas(politicalWorking) or "N/A"))
+
+        -- Spending Laws Attributes
+        local spendingCorruption = getValue(spendingFolder, "Corruption", true)
+        SpendingCorruptionLabel:SetText("Spending (Laws): Corruption = " .. (spendingCorruption ~= nil and formatNumberWithCommas(spendingCorruption) or "N/A"))
+
+        local spendingEducation = getValue(spendingFolder, "Education", true)
+        SpendingEducationLabel:SetText("Spending (Laws): Education = " .. (spendingEducation ~= nil and formatNumberWithCommas(spendingEducation) or "N/A"))
+
+        local spendingGovernment = getValue(spendingFolder, "Government", true)
+        SpendingGovernmentLabel:SetText("Spending (Laws): Government = " .. (spendingGovernment ~= nil and formatNumberWithCommas(spendingGovernment) or "N/A"))
+
+        local spendingHealthcare = getValue(spendingFolder, "Healthcare", true)
+        SpendingHealthcareLabel:SetText("Spending (Laws): Healthcare = " .. (spendingHealthcare ~= nil and formatNumberWithCommas(spendingHealthcare) or "N/A"))
+
+        local spendingMilitary = getValue(spendingFolder, "Military", true)
+        SpendingMilitaryLabel:SetText("Spending (Laws): Military = " .. (spendingMilitary ~= nil and formatNumberWithCommas(spendingMilitary) or "N/A"))
+
+        local spendingReconstruction = getValue(spendingFolder, "Reconstruction", true)
+        SpendingReconstructionLabel:SetText("Spending (Laws): Reconstruction = " .. (spendingReconstruction ~= nil and formatNumberWithCommas(spendingReconstruction) or "N/A"))
+
+        local spendingResearch = getValue(spendingFolder, "Research", true)
+        SpendingResearchLabel:SetText("Spending (Laws): Research = " .. (spendingResearch ~= nil and formatNumberWithCommas(spendingResearch) or "N/A"))
+
+        local spendingSecurity = getValue(spendingFolder, "Security", true)
+        SpendingSecurityLabel:SetText("Spending (Laws): Security = " .. (spendingSecurity ~= nil and formatNumberWithCommas(spendingSecurity) or "N/A"))
+
+        -- Other Country Data
+        local c3Value = getValue(countryDataFolder, "C3")
+        C3Label:SetText("C3 = " .. (c3Value ~= nil and tostring(c3Value) or "N/A"))
+
+        local capitalValue = getValue(countryDataFolder, "Capital")
+        CapitalLabel:SetText("Capital = " .. (capitalValue ~= nil and tostring(capitalValue) or "N/A"))
+
+        local leaderValue = getValue(countryDataFolder, "Leader")
+        LeaderLabel:SetText("Leader = " .. (leaderValue ~= nil and tostring(leaderValue) or "N/A"))
+
+        local skinValue = getValue(countryDataFolder, "Skin")
+        SkinLabel:SetText("Skin = " .. (skinValue ~= nil and tostring(skinValue) or "N/A"))
+
+    else
+        -- Reset all labels to "N/A (Country not found)"
+        TreasuryLabel:SetText("Treasury/Balance = " .. notFoundText)
+        IncomeRevenueLabel:SetText("Income/Revenue = " .. notFoundText)
+        TaxLabel:SetText("Tax = " .. notFoundText)
+        TaxResourceLabel:SetText("TaxResource (resources) = " .. notFoundText)
+        TradeExportLabel:SetText("TradeExport = " .. notFoundText)
+        ReparationsRevenueLabel:SetText("Reparations = " .. notFoundText)
+        PuppetsRevenueLabel:SetText("Puppets = " .. notFoundText)
+
+        UpkeepLabel:SetText("Upkeep = " .. notFoundText)
+        ReinforcementsLabel:SetText("Reinforcements = " .. notFoundText)
+        TradeImportLabel:SetText("TradeImport = " .. notFoundText)
+        ReparationsExpensesLabel:SetText("Reparations = " .. notFoundText)
+        PuppetsExpensesLabel:SetText("Puppets = " .. notFoundText)
+        BuildingExpensesLabel:SetText("Building Expenses = " .. notFoundText)
+
+        GovernmentSpendingLabel:SetText("Government Spending (Economy) = " .. notFoundText)
+        SecuritySpendingLabel:SetText("Security Spending (Economy) = " .. notFoundText)
+        EducationSpendingLabel:SetText("Education Spending (Economy) = " .. notFoundText)
+        AntiCorruptionSpendingLabel:SetText("Anti-Corruption Spending (Economy) = " .. notFoundText)
+        HealthcareSpendingLabel:SetText("Healthcare Spending (Economy) = " .. notFoundText)
+        ResearchSpendingLabel:SetText("Research Spending (Economy) = " .. notFoundText)
+        ReconstructionSpendingLabel:SetText("Reconstruction Spending (Economy) = " .. notFoundText)
+
+        CorruptionLabel:SetText("Corruption = " .. notFoundText)
+        CorruptionIncreaseLabel:SetText("Corruption (Increase) = " .. notFoundText)
+        MilitaryLabel:SetText("Military = " .. notFoundText)
+        MilitaryIncreaseLabel:SetText("Military (Increase) = " .. notFoundText)
+        PoliticalPowerLabel:SetText("Political Power = " .. notFoundText)
+        PoliticalPowerIncreaseLabel:SetText("Political Power (Increase) = " .. notFoundText)
+        ReadinessLabel:SetText("Readiness = " .. notFoundText)
+        ReadinessIncreaseLabel:SetText("Readiness (Increase) = " .. notFoundText)
+        ResearchPowerLabel:SetText("Research (Power) = " .. notFoundText)
+        ResearchPowerIncreaseLabel:SetText("Research (Power Increase) = " .. notFoundText)
+        WarExhaustionLabel:SetText("War Exhaustion = " .. notFoundText)
+        WarExhaustionIncreaseLabel:SetText("War Exhaustion (Increase) = " .. notFoundText)
+        ManpowerLabel:SetText("Manpower = " .. notFoundText)
+
+        StabilityLabel:SetText("Stability = " .. notFoundText)
+        StabilityChangeLabel:SetText("Stability (Change) = " .. notFoundText)
+        StabilityGoalLabel:SetText("Stability (Goal) = " .. notFoundText)
+        StabilityBaseLabel:SetText("Stability (Base) = " .. notFoundText)
+        PopulationLabel:SetText("Population = " .. notFoundText)
+        PopulationGrowthRateLabel:SetText("Population (Growth Rate) = " .. notFoundText)
+        GrowthRateExistingPopulationLabel:SetText("Growth Rate: Existing Population = " .. notFoundText)
+        GrowthRateNaturalGrowthLabel:SetText("Growth Rate: Natural Growth = " .. notFoundText)
+        GrowthRateStabilityLabel:SetText("Growth Rate: Stability = " .. notFoundText)
+        RankingLabel:SetText("Ranking = " .. notFoundText)
+
+        IdeologyLabel:SetText("Ideology = " .. notFoundText)
+        ConscriptionLabel:SetText("Conscription = " .. notFoundText)
+        TaxationLawsLabel:SetText("Taxation (Laws) = " .. notFoundText)
+
+        PoliticalConscriptionLabel:SetText("Political: Conscription = " .. notFoundText)
+        PoliticalFactionLabel:SetText("Political: Faction = " .. notFoundText)
+        PoliticalFirearmLabel:SetText("Political: Firearm = " .. notFoundText)
+        PoliticalIndustryLabel:SetText("Political: Industry = " .. notFoundText)
+        PoliticalPopulationLabel:SetText("Political: Population = " .. notFoundText)
+        PoliticalPressLabel:SetText("Political: Press = " .. notFoundText)
+        PoliticalReligionLabel:SetText("Political: Religion = " .. notFoundText)
+        PoliticalResourceLabel:SetText("Political: Resource = " .. notFoundText)
+        PoliticalUniqueMonarchyLabel:SetText("Political: Unique_Monarchy = " .. notFoundText)
+        PoliticalWarBondLabel:SetText("Political: WarBond = " .. notFoundText)
+        PoliticalWorkingLabel:SetText("Political: Working = " .. notFoundText)
+
+        SpendingCorruptionLabel:SetText("Spending (Laws): Corruption = " .. notFoundText)
+        SpendingEducationLabel:SetText("Spending (Laws): Education = " .. notFoundText)
+        SpendingGovernmentLabel:SetText("Spending (Laws): Government = " .. notFoundText)
+        SpendingHealthcareLabel:SetText("Spending (Laws): Healthcare = " .. notFoundText)
+        SpendingMilitaryLabel:SetText("Spending (Laws): Military = " .. notFoundText)
+        SpendingReconstructionLabel:SetText("Spending (Laws): Reconstruction = " .. notFoundText)
+        SpendingResearchLabel:SetText("Spending (Laws): Research = " .. notFoundText)
+        SpendingSecurityLabel:SetText("Spending (Laws): Security = " .. notFoundText)
+
+        C3Label:SetText("C3 = " .. notFoundText)
+        CapitalLabel:SetText("Capital = " .. notFoundText)
+        LeaderLabel:SetText("Leader = " .. notFoundText)
+        SkinLabel:SetText("Skin = " .. notFoundText)
+    end
+end
+
+-- Function to start or stop the automatic refresh loop
+local function startOrStopAutoRefresh()
+    -- Always cancel the existing task first to prevent duplicates or orphaned tasks
+    if currentRefreshTask then
+        task.cancel(currentRefreshTask)
+        currentRefreshTask = nil
+    end
+
+    -- If auto-refresh is enabled AND there's a valid country name stored, start a new loop
+    if autoRefreshEnabled and currentCountryNameBeingRefreshed ~= "" then
+        -- Capture the country name for this specific loop instance
+        local countryNameToLoop = currentCountryNameBeingRefreshed
+        currentRefreshTask = task.spawn(function()
+            -- The loop continues as long as the global tracker matches the country name
+            -- that this specific loop instance was started for.
+            while currentCountryNameBeingRefreshed == countryNameToLoop do
+                refreshCountryStats(countryNameToLoop)
+                task.wait(7) -- Wait for 7 seconds before the next refresh
+            end
+        end)
+    end
+end
+
+-- Input field Callback
+local Input = LeftGroupbox:AddInput("CountryNameInput", {
+    Text = "Search up country",
+    Default = "",
+    Numeric = false,
+    Finished = true,
+    Placeholder = "Enter Countryname >:33",
+    Tooltip = "This is capital sensitive and you have to enter it exactly (especially in custom servers)",
+    ClearTextOnFocus = false,
+    Callback = function(Value)
+        local countryName = Value:gsub("^%s+", ""):gsub("%s+$", "") -- Trim whitespace
+
+        -- Update the global tracker for the country name being refreshed
+        currentCountryNameBeingRefreshed = countryName
+
+        -- Immediately refresh the stats based on the new input
+        refreshCountryStats(countryName)
+
+        -- Evaluate and start/stop the auto-refresh loop based on current conditions
+        startOrStopAutoRefresh()
+    end
+})
+
+-- Auto-Refresh Toggle
+local AutoRefreshCheckbox = LeftGroupbox:AddToggle("Auto-Refresh Stats", {
+    Text = "Auto-Refresh Stats",
+    Tooltip = "This will refresh the stats every 7 seconds, toggleable",
+    Default = true, -- Default to auto-refresh enabled
+    Callback = function(Value)
+        autoRefreshEnabled = Value -- Update the global flag
+        startOrStopAutoRefresh() -- Re-evaluate and start/stop the loop
+    end
+})
+
+local MainTab = Window:AddTab("AutoHost", "screen-share") -- Second parameter is the icon name (optional)
+
+local LeftGroupbox = MainTab:AddLeftGroupbox("Auto Events/Message", "wrench")
+
+LeftGroupbox:AddButton({
+    Text = "AutoHost Anschlus event",
+    Func = function()
+        -- The button acts as a start/stop for the event listener
+        if not dateConnection then
+            -- Starts listening for the date
+            local vipConsole = workspace:WaitForChild("GameManager"):WaitForChild("VipConsole")
+            print("Event activated. Waiting for the date.")
+            
+            dateConnection = workspace.CountryManager.Date.Actual.Changed:Connect(function()
+                local date = workspace.CountryManager.Date.Actual.Value
+                if date.X == 3 and date.Y == 12 and date.Z == 1938 then
+                    print("Date reached! Firing the event.")
+                    vipConsole:FireServer("CustomMessage", {
+                        Message = "Anschlusus turssss die austria",
+                        Mode = "Notification",
+                        Title = "Anschlusus Test for a Script",
+                        Button = "Bboiiiiii"
+                    })
+                    -- After firing, the listener disconnects to prevent it from firing again
+                    dateConnection:Disconnect()
+                    dateConnection = nil
+                end
+            end)
+        else
+            -- Stops listening for the date
+            dateConnection:Disconnect()
+            dateConnection = nil
+            print("Event deactivated.")
+        end
+    end
+})
+
+local MainTab = Window:AddTab("AudioPlayer", "file-audio") -- Second parameter is the icon name (optional)
+
+local LeftGroupbox = MainTab:AddLeftGroupbox("Normal Soundtrack >>:D", "music-4")
+local WrappedLabel = LeftGroupbox:AddLabel({
+    Text = "Normal SoundTrack",
+    DoesWrap = true
+})
+
+local autoLooped = false -- Default to not looped
+
+-- Helper function to create a button with common notification logic
+-- This function now dynamically sets the 'Looped' parameter based on the autoLooped global variable.
+-- IMPORTANT: This assumes Library:Notify supports a 'Looped' boolean parameter.
+local function createSoundButton(groupbox, text, title, description, time, soundId)
+    groupbox:AddButton({
+        Text = text,
+        Func = function()
+            Library:Notify({
+                Title = title,
+                Description = description,
+                Time = time,
+                SoundId = soundId,
+                Looped = autoLooped -- Pass the global loop state to the notification
+            })
+        end,
+    })
+end
+
+-- APM Soundtracks
+LeftGroupbox:AddButton({
+    Text = "APM - 22 Seconds",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - APM 22 Seconds",
+            Description = "This lasts 139.636 Seconds :3",
+            Time = 139.636, -- Duration in seconds
+            SoundId = 1837960098 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "APM - Age Of Triumph Underscore",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - APM - Age Of Triumph Underscore",
+            Description = "This lasts 117 Seconds :3", -- Duration was from previous input, not explicitly shown for this sound in properties in video. Keeping for consistency with previous user input.
+            Time = 117,
+            SoundId = 1837945640 -- Sound ID was from previous input, not explicitly shown for this sound in properties in video. Keeping for consistency.
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "APM - General Mobilization",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - APM - General Mobilization",
+            Description = "This lasts 152.129 Seconds :3",
+            Time = 152.129, -- Duration in seconds
+            SoundId = 1837225204 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "APM - Kings and Queens Underscore",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - APM - Kings and Queens Underscore",
+            Description = "This lasts 146.143 Seconds :3",
+            Time = 146.143, -- Duration in seconds
+            SoundId = 1837945171 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "APM - Millennium",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - APM - Millennium",
+            Description = "This lasts 260.833 Seconds :3",
+            Time = 260.833, -- Duration in seconds
+            SoundId = 1837911975 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "APM - Purge",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - APM - Purge",
+            Description = "This lasts 134.769 Seconds :3",
+            Time = 134.769, -- Duration in seconds
+            SoundId = 1837988036 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "APM - Terror Squad",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - APM - Terror Squad",
+            Description = "This lasts 120 Seconds :3",
+            Time = 120, -- Duration in seconds
+            SoundId = 1837978825 -- Sound ID
+        })
+    end,
+})
+
+-- Democracy 4 Soundtracks
+LeftGroupbox:AddButton({
+    Text = "Democracy 4 - Dark Background 1",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Democracy 4 - Dark Background 1",
+            Description = "This lasts 242.403 Seconds :3",
+            Time = 242.403, -- Duration in seconds
+            SoundId = 6083742826 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "Democracy 4 - Dark Background 2",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Democracy 4 - Dark Background 2",
+            Description = "This lasts 240.612 Seconds :3",
+            Time = 240.612, -- Duration in seconds
+            SoundId = 6083739490 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "Democracy 4 - Dark Background 3",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Democracy 4 - Dark Background 3",
+            Description = "This lasts 248.304 Seconds :3",
+            Time = 248.304, -- Duration in seconds
+            SoundId = 6083746644 -- Sound ID
+        })
+    end,
+})
+
+-- East vs West Soundtracks
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Allies Peace 1",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Allies Peace 1",
+            Description = "This lasts 194.672 Seconds :3",
+            Time = 194.672, -- Duration in seconds
+            SoundId = 6080620230 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Allies Peace 2",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Allies Peace 2",
+            Description = "This lasts 158.803 Seconds :3",
+            Time = 158.803, -- Duration in seconds
+            SoundId = 6080619798 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Allies Peace...",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Allies Peace...",
+            Description = "This lasts 84.213 Seconds :3",
+            Time = 84.213, -- Duration in seconds
+            SoundId = 6084189170 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - An Uncertain...",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - An Uncertain...",
+            Description = "This lasts 98.573 Seconds :3",
+            Time = 98.573, -- Duration in seconds
+            SoundId = 6084188153 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Beacon",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Beacon",
+            Description = "This lasts 209.315 Seconds :3",
+            Time = 209.315, -- Duration in seconds
+            SoundId = 6080618668 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Delightful...",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Delightful...",
+            Description = "This lasts 200.625 Seconds :3",
+            Time = 200.625, -- Duration in seconds
+            SoundId = 6080617170 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Desert at Dusk",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Desert at Dusk",
+            Description = "This lasts 204.413 Seconds :3",
+            Time = 204.413, -- Duration in seconds
+            SoundId = 6084183280 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Dilemma",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Dilemma",
+            Description = "This lasts 140.094 Seconds :3",
+            Time = 140.094, -- Duration in seconds
+            SoundId = 6084182313 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Diminishment",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Diminishment",
+            Description = "This lasts 112.131 Seconds :3",
+            Time = 112.131, -- Duration in seconds
+            SoundId = 6080615484 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Float",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Float",
+            Description = "This lasts 196.333 Seconds :3",
+            Time = 196.333, -- Duration in seconds
+            SoundId = 6084186720 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Gradient",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Gradient",
+            Description = "This lasts 160.893 Seconds :3",
+            Time = 160.893, -- Duration in seconds
+            SoundId = 6084179534 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Gridlock",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Gridlock",
+            Description = "This lasts 159.105 Seconds :3",
+            Time = 159.105, -- Duration in seconds
+            SoundId = 6080614466 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Monplus",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Monplus",
+            Description = "This lasts 211.893 Seconds :3",
+            Time = 211.893, -- Duration in seconds
+            SoundId = 6084176798 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Nonplus",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Nonplus",
+            Description = "This lasts 133.058 Seconds :3",
+            Time = 133.058, -- Duration in seconds
+            SoundId = 6080612969 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Orient",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Orient",
+            Description = "This lasts 269.626 Seconds :3",
+            Time = 269.626, -- Duration in seconds
+            SoundId = 6080612695 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Russian...",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Russian...",
+            Description = "This lasts 90.582 Seconds :3",
+            Time = 90.582, -- Duration in seconds
+            SoundId = 6080612203 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Spanish Heart",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Spanish Heart",
+            Description = "This lasts 179.774 Seconds :3",
+            Time = 179.774, -- Duration in seconds
+            SoundId = 6084175632 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Ties Are Broken",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Ties Are Broken",
+            Description = "This lasts 215.613 Seconds :3",
+            Time = 215.613, -- Duration in seconds
+            SoundId = 6084169266 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Tranquilit\xe9",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Tranquilit\xe9",
+            Description = "This lasts 199.464 Seconds :3",
+            Time = 199.464, -- Duration in seconds
+            SoundId = 6080610054 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Voices...",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Voices...",
+            Description = "This lasts 133.694 Seconds :3",
+            Time = 133.694, -- Duration in seconds
+            SoundId = 6084164711 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Water Vapour",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Water Vapour",
+            Description = "This lasts 182.159 Seconds :3",
+            Time = 182.159, -- Duration in seconds
+            SoundId = 6080608096 -- Sound ID
+        })
+    end,
+})
+
+-- Hearts of Iron III Soundtracks
+LeftGroupbox:AddButton({
+    Text = "Hearts of Iron III - convoys",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - convoys",
+            Description = "This lasts 59.533 Seconds :3",
+            Time = 59.533, -- Duration in seconds
+            SoundId = 6080247046 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "Hearts of Iron III - dangeroustothers",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - dangeroustothers",
+            Description = "This lasts 82.155 Seconds :3",
+            Time = 82.155, -- Duration in seconds
+            SoundId = 6080245874 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "Hearts of Iron III - defensive",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - defensive",
+            Description = "This lasts 115.409 Seconds :3",
+            Time = 115.409, -- Duration in seconds
+            SoundId = 6080246744 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "Hearts of Iron III - faction_com",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - faction_com",
+            Description = "This lasts 68.023 Seconds :3",
+            Time = 68.023, -- Duration in seconds
+            SoundId = 6080246186 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "Hearts of Iron III - gen_peace_1",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - gen_peace_1",
+            Description = "This lasts 97.019 Seconds :3",
+            Time = 97.019, -- Duration in seconds
+            SoundId = 6080253204 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "Hearts of Iron III - gen_peace_2",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - gen_peace_2",
+            Description = "This lasts 135.053 Seconds :3",
+            Time = 135.053, -- Duration in seconds
+            SoundId = 6080235919 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "Hearts of Iron III - gen_peace_wearefree",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - gen_peace_wearefree",
+            Description = "This lasts 196.389 Seconds :3",
+            Time = 196.389, -- Duration in seconds
+            SoundId = 6080232460 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "Hearts of Iron III - genpeace_letterspro...",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - genpeace_letterspro...",
+            Description = "This lasts 162.508 Seconds :3",
+            Time = 162.508, -- Duration in seconds
+            SoundId = 6080241916 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "Hearts of Iron III - genpeace_thepacific",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - genpeace_thepacific",
+            Description = "This lasts 125.518 Seconds :3",
+            Time = 125.518, -- Duration in seconds
+            SoundId = 6080234884 -- Sound ID
+        })
+    end,
+})
+
+-- Other Soundtracks (from video)
+LeftGroupbox:AddButton({
+    Text = "Information Age",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Information Age",
+            Description = "This lasts 165.392 Seconds :3",
+            Time = 165.392, -- Duration in seconds
+            SoundId = 1843007096 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "Track1",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Track1",
+            Description = "This lasts 83.482 Seconds :3",
+            Time = 83.482, -- Duration in seconds
+            SoundId = 3608079813 -- Sound ID
+        })
+    end,
+})
+
+LeftGroupbox:AddButton({
+    Text = "Track2",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Track2",
+            Description = "This lasts 70.014 Seconds :3",
+            Time = 70.014, -- Duration in seconds
+            SoundId = 3608325004 -- Sound ID
+        })
+    end,
+})
+
+-- New "War" Soundtracks
+local WarGroupbox = MainTab:AddLeftGroupbox("War Soundtracks 3:<", "swords") -- s0rt
+local WarWrappedLabel = WarGroupbox:AddLabel({
+    Text = "War SoundTrack",
+    DoesWrap = true
+})
+
+WarGroupbox:AddButton({
+    Text = "APM - Geopolitical Dramas",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - APM - Geopolitical Dramas",
+            Description = "This lasts 184.25 Seconds :3",
+            Time = 184.25,
+            SoundId = 1842568712
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "APM - Into Battle",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - APM - Into Battle",
+            Description = "This lasts 191.186 Seconds :3",
+            Time = 191.186,
+            SoundId = 1836964152
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "APM - Political Battle",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - APM - Political Battle",
+            Description = "This lasts 115.056 Seconds :3",
+            Time = 115.056,
+            SoundId = 1837292963
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "APM - Total Impact a",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - APM - Total Impact a",
+            Description = "This lasts 139.064 Seconds :3",
+            Time = 139.064,
+            SoundId = 1841476429
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "Arabic",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Arabic",
+            Description = "This lasts 233.143 Seconds :3",
+            Time = 233.143,
+            SoundId = 538193087
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "Bullet Dodge",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Bullet Dodge",
+            Description = "This lasts 104.828 Seconds :3",
+            Time = 104.828,
+            SoundId = 1835345720
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "East vs West Soundtrack - A Path of Danger",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - A Path of Danger",
+            Description = "This lasts 115.254 Seconds :3",
+            Time = 115.254,
+            SoundId = 6084191090
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "East vs West Soundtrack - A State of Panic",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - A State of Panic",
+            Description = "This lasts 122.734 Seconds :3",
+            Time = 122.734,
+            SoundId = 6084190046
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Allies Battle 1",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Allies Battle 1",
+            Description = "This lasts 199.534 Seconds :3",
+            Time = 199.534,
+            SoundId = 6084189723
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Defcon...",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Defcon...",
+            Description = "This lasts 112.053 Seconds :3",
+            Time = 112.053,
+            SoundId = 6084187652
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Defcon 2_Weary...",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Defcon 2_Weary...",
+            Description = "This lasts 107.894 Seconds :3",
+            Time = 107.894,
+            SoundId = 6084185652
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Democratic...",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Democratic...",
+            Description = "This lasts 66.254 Seconds :3",
+            Time = 66.254,
+            SoundId = 6084183863
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "East vs West Soundtrack - General Battle 1",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - General Battle 1",
+            Description = "This lasts 139.853 Seconds :3",
+            Time = 139.853,
+            SoundId = 6084180323
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Latin Battle",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Latin Battle",
+            Description = "This lasts 178.333 Seconds :3",
+            Time = 178.333,
+            SoundId = 6084178707
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Russia Battle 1",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Russia Battle 1",
+            Description = "This lasts 202.214 Seconds :3",
+            Time = 202.214,
+            SoundId = 6084181178
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Russia Battle 2",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Russia Battle 2",
+            Description = "This lasts 144.534 Seconds :3",
+            Time = 144.534,
+            SoundId = 6084172612
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Sand Struggle",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Sand Struggle",
+            Description = "This lasts 140.013 Seconds :3",
+            Time = 140.013,
+            SoundId = 6084167269
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "East vs West Soundtrack - Superpowers",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - East vs West Soundtrack - Superpowers",
+            Description = "This lasts 258.253 Seconds :3",
+            Time = 258.253,
+            SoundId = 6084165632
+        })
+    end,
+})
+
+-- Hearts of Iron III - War Tracks
+WarGroupbox:AddButton({
+    Text = "Hearts of Iron III - offensive",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - offensive",
+            Description = "This lasts 106.531 Seconds :3",
+            Time = 106.531,
+            SoundId = 6080238832
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "Hearts of Iron III - World At War",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - World At War",
+            Description = "This lasts 87.641 Seconds :3",
+            Time = 87.641,
+            SoundId = 497205706
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "Hearts of Iron III - alliesdoinggood",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - alliesdoinggood",
+            Description = "This lasts 84.01 Seconds :3",
+            Time = 84.01,
+            SoundId = 6080252288
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "Hearts of Iron III - bigairforce",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - bigairforce",
+            Description = "This lasts 64.366 Seconds :3",
+            Time = 64.366,
+            SoundId = 6080252568
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "Hearts of Iron III - bigarmy",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - bigarmy",
+            Description = "This lasts 69.747 Seconds :3",
+            Time = 69.747,
+            SoundId = 6080248497
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "Hearts of Iron III - bigfleet",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - bigfleet",
+            Description = "This lasts 70.531 Seconds :3",
+            Time = 70.531,
+            SoundId = 6080248150
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "Hearts of Iron III - bombingthem",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - bombingthem",
+            Description = "This lasts 87.51 Seconds :3",
+            Time = 87.51,
+            SoundId = 6080247855
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "Hearts of Iron III - bombingus",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - bombingus",
+            Description = "This lasts 86.047 Seconds :3",
+            Time = 86.047,
+            SoundId = 6080234185
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "Hearts of Iron III - convoysgetsunk",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - convoysgetsunk",
+            Description = "This lasts 65.045 Seconds :3",
+            Time = 65.045,
+            SoundId = 6080230870
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "Hearts of Iron III - gen_com_leningrad",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - gen_com_leningrad",
+            Description = "This lasts 119.824 Seconds :3",
+            Time = 119.824,
+            SoundId = 6080242528
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "Hearts of Iron III - gen_war_balletofwar",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - gen_war_balletofwar",
+            Description = "This lasts 90.514 Seconds :3",
+            Time = 90.514,
+            SoundId = 6080248908
+        })
+    end,
+})
+
+WarGroupbox:AddButton({
+    Text = "Hearts of Iron III - gen_war_omahabeach",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - gen_war_omahabeach",
+            Description = "This lasts 124.029 Seconds :3",
+            Time = 124.029,
+            SoundId = 6080236556
+        })
+    end,
+})
+
+-- "Hurt" Soundtracks
+local HurtGroupbox = MainTab:AddLeftGroupbox("Hurt", "heart-crack")
+local HurtWrappedLabel = HurtGroupbox:AddLabel({
+    Text = "Hurt SoundTrack",
+    DoesWrap = true
+})
+
+HurtGroupbox:AddButton({
+    Text = "APM - A Mother's Tears",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - APM - A Mother's Tears",
+            Description = "This lasts 242.54 Seconds :3",
+            Time = 242.54,
+            SoundId = 1837225831
+        })
+    end,
+})
+
+HurtGroupbox:AddButton({
+    Text = "APM - Caught in a Lie (b)",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - APM - Caught in a Lie (b)",
+            Description = "This lasts 103.318 Seconds :3",
+            Time = 103.318,
+            SoundId = 1837813778
+        })
+    end,
+})
+
+HurtGroupbox:AddButton({
+    Text = "Hearts of Iron III - dissent",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - dissent",
+            Description = "This lasts 91.011 Seconds :3",
+            Time = 91.011,
+            SoundId = 6080245231
+        })
+    end,
+})
+
+HurtGroupbox:AddButton({
+    Text = "Hearts of Iron III - looscalotofbattles",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - looscalotofbattles",
+            Description = "This lasts 101.512 Seconds :3",
+            Time = 101.512,
+            SoundId = 6080241240
+        })
+    end,
+})
+
+HurtGroupbox:AddButton({
+    Text = "Hearts of Iron III - lowonmanpower",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - lowonmanpower",
+            Description = "This lasts 116.558 Seconds :3",
+            Time = 116.558,
+            SoundId = 6080240728
+        })
+    end,
+})
+
+HurtGroupbox:AddButton({
+    Text = "Hearts of Iron III - unitylow",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - unitylow",
+            Description = "This lasts 148.01 Seconds :3",
+            Time = 148.01,
+            SoundId = 6080240185
+        })
+    end,
+})
+
+--Nuke SoundTracks
+local NukeGroupbox = MainTab:AddLeftGroupbox("Nuke", "bomb")
+local NukeWrappedLabel = NukeGroupbox:AddLabel({
+    Text = "Nuke SoundTrack",
+    DoesWrap = true
+})
+
+NukeGroupbox:AddButton({
+    Text = "Battlefield 3 - Solomon's Theme",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Battlefield 3 - Solomon's Theme",
+            Description = "This lasts 191.653 Seconds :3",
+            Time = 191.653,
+            SoundId = 7338662159
+        })
+    end,
+})
+
+-- "Undecided" Soundtracks
+local UndecidedGroupbox = MainTab:AddLeftGroupbox("Undecided", "webhook-off")
+local UndecidedWrappedLabel = UndecidedGroupbox:AddLabel({
+    Text = "Undecided SoundTrack",
+    DoesWrap = true
+})
+
+UndecidedGroupbox:AddButton({
+    Text = "Hearts of Iron III - faction_allies_setfordepa",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - faction_allies_setfordepa",
+            Description = "This lasts 111.134 Seconds :3",
+            Time = 111.134,
+            SoundId = 6080237134
+        })
+    end,
+})
+
+UndecidedGroupbox:AddButton({
+    Text = "Hearts of Iron III - genaxis1_luftwaffe",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - genaxis1_luftwaffe",
+            Description = "This lasts 75.05 Seconds :3",
+            Time = 75.05,
+            SoundId = 6080233348
+        })
+    end,
+})
+
+UndecidedGroupbox:AddButton({
+    Text = "Hearts of Iron III - gencom1_risemycomrades",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - gencom1_risemycomrades",
+            Description = "This lasts 147.017 Seconds :3",
+            Time = 147.017,
+            SoundId = 6080238274
+        })
+    end,
+})
+
+UndecidedGroupbox:AddButton({
+    Text = "Hearts of Iron III - hymnfortheoneslostatsa",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - hymnfortheoneslostatsa",
+            Description = "This lasts 60.54 Seconds :3",
+            Time = 60.54,
+            SoundId = 6080242971
+        })
+    end,
+})
+
+UndecidedGroupbox:AddButton({
+    Text = "Hearts of Iron III - landactions",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - landactions",
+            Description = "This lasts 103.053 Seconds :3",
+            Time = 103.053,
+            SoundId = 6080251934
+        })
+    end,
+})
+
+UndecidedGroupbox:AddButton({
+    Text = "Hearts of Iron III - lotsofbattles_wellciledw...",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - lotsofbattles_wellciledw...",
+            Description = "This lasts 86.518 Seconds :3",
+            Time = 86.518,
+            SoundId = 6080231758
+        })
+    end,
+})
+
+UndecidedGroupbox:AddButton({
+    Text = "Hearts of Iron III - manyarmiesmoving",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - manyarmiesmoving",
+            Description = "This lasts 55.51 Seconds :3",
+            Time = 55.51,
+            SoundId = 6080239207
+        })
+    end,
+})
+
+UndecidedGroupbox:AddButton({
+    Text = "Hearts of Iron III - tanksalot",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - tanksalot",
+            Description = "This lasts 97.881 Seconds :3",
+            Time = 97.881,
+            SoundId = 6080251570
+        })
+    end,
+})
+
+UndecidedGroupbox:AddButton({
+    Text = "Hearts of Iron III - theironanthem_v1",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - theironanthem_v1",
+            Description = "This lasts 130.534 Seconds :3",
+            Time = 130.534,
+            SoundId = 6080251062
+        })
+    end,
+})
+
+UndecidedGroupbox:AddButton({
+    Text = "Hearts of Iron III - threatenedwhileatpeace",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - threatenedwhileatpeace",
+            Description = "This lasts 80.044 Seconds :3",
+            Time = 80.044,
+            SoundId = 6080233843
+        })
+    end,
+})
+
+UndecidedGroupbox:AddButton({
+    Text = "Hearts of Iron III - titletheme_heartsofiron",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - titletheme_heartsofiron",
+            Description = "This lasts 336.536 Seconds :3",
+            Time = 336.536,
+            SoundId = 6080244350
+        })
+    end,
+})
+
+UndecidedGroupbox:AddButton({
+    Text = "Hearts of Iron III - victorymarchb",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - victorymarchb",
+            Description = "This lasts 17.45 Seconds :3",
+            Time = 17.45,
+            SoundId = 6080232655
+        })
+    end,
+})
+
+UndecidedGroupbox:AddButton({
+    Text = "Hearts of Iron III - winalotofbattles",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Hearts of Iron III - winalotofbattles",
+            Description = "This lasts 73.038 Seconds :3",
+            Time = 73.038,
+            SoundId = 6080231418
+        })
+    end,
+})
+
+local RightGroupbox = MainTab:AddRightGroupbox("Audio Settings", "sliders-horizontal")
+
+local MyToggle = RightGroupbox:AddToggle("MyToggle", {
+    Text = "Loop Audio",
+    Default = false,
+    Tooltip = "This loops the songs",
+    Callback = function(Value)
+        autoLooped = value
+    end
+})
+
+local NiceGroupBox = MainTab:AddRightGroupbox("Other music i lik", "webhook-off")
+
+NiceGroupBox:AddImage("Yukari", {
+    Image = "https://www.roblox.com/asset/?id=108776550239899",
+    Height = 200
+})
+
+NiceGroupBox:AddButton({
+    Text = "Sakkajarven polkkaaaaa",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Sakkarjarven Polkka",
+            Description = "ngl i forgot >:3 | 147 seconds long",
+            Time = 147,
+            SoundId = 695376191
+        })
+    end,
+})
+
+NiceGroupBox:AddButton({
+    Text = "Katyusha GUP",
+    Func = function()
+        Library:Notify({
+            Title = "Imperial Script - Katyusha GUP",
+            Description = "Lowkey Best song out there",
+            Time = 400,
+            SoundId = 696966717
+        })
+    end,
+})
+
+local MainTab = Window:AddTab("Script-Bloopers", "scroll-text") -- Second parameter is the icon name (optional)
+
+local Tabbox = MainTab:AddLeftTabbox("Bloopers >:3")
+local TheReleaseDevelopmentTab = Tabbox:AddTab("1.0.0 Development :3")
+local Tab101 = Tabbox:AddTab("1.0.1 Development:D")
+
+local WrappedLabel = TheReleaseDevelopmentTab:AddLabel({
+    Text = "at the start of making the script (v1.0.0) i got an idea to make a rise of nations scripts, it was meant to be a private script at first and may stay that way. I decided to start doing the Country search up first as it was pretty easy, (i was on a ipad) i had to keep switching between apps to get the code done, i just looked though dex then looked at country data and made it so if u made a input then it would show the stats, at first it didnt have any commas between the numbers so i decided to add commas between the number stats to make it easier to read in real time. a lil funfact: before i made this, yesterday i didnt sleep at all and i made this afterwards without 1 day of sleep... well cya for next bloopers peaceout -Neonicf/Notezfc",
+    DoesWrap = true
+})
